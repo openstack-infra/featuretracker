@@ -1,2 +1,2 @@
-# Open Stack Cross-project Dashboard
+# OpenStack Cross-project Dashboard
 Coming soon..
