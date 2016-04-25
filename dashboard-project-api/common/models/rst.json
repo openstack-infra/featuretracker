@@ -1,0 +1,17 @@
+{
+  "name": "Rst",
+  "plural": "Rsts",
+  "base": "PersistedModel",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "patchValues": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

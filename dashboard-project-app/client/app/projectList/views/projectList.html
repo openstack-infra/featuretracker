@@ -1,0 +1,27 @@
+<div class="col-xs-12">
+    <div class="row dp-top-alignment">
+        <div class="container">
+            <div id="toolbar">
+                <div>
+                    <Label class="dp-title">OpenStack Cross-project Dashboard</label>
+                </div>
+            </div>
+            <table id="table"
+                   data-pagination="true"
+                   data-search="true"
+                   data-toolbar="#toolbar"
+                   data-sort-name="lastUpdate"
+                   data-sort-order="desc"
+                   data-row-style="rowStyle">
+                <thead>
+                <tr>
+                    <th data-field="userStory" data-sortable="true" data-formatter="nameFormatter">User Story</th>
+                    <th data-field="dateCreated" data-sortable="true">Date Created</th>
+                    <th data-field="lastUpdate" data-sortable="true">Last Update</th>
+                    <th data-field="completed" data-sortable="true" data-formatter="progressBar">% Completed</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>

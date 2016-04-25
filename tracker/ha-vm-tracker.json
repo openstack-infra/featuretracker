@@ -1,0 +1,34 @@
+{
+    "id": "0003",
+    "date": "08-04-2016",
+    "submitted_by": {
+        "name": "Yih Leong Sun",
+        "email": "yihleong@gmail.com>"
+    },
+    "description": "High Availability for Virtual Machines",
+    "source": "ha_vm",
+    "status": "in-progress",
+    "tasks": [
+        "clouds.yaml support in clients"
+    ],
+    "tasks_status": {
+        "clouds.yaml support in clients": {
+            "cross-project spec": "clouds-yaml-support",
+            "gerrit-topic": "",
+            "xp_status": "in-progress",
+            "projects": [
+                "nova"
+            ],
+            "projects_status": {
+                "nova": {
+                    "blueprints": {
+                        "bp/os-vif-library": "completed",
+                        "bp/privsep": "completed"
+                    },
+                    "spec": "http://specs.openstack.org/openstack/openstack-user-stories/user-stories/proposed/capacity_management.html",
+                    "spec_status": "completed"
+                }
+            }
+      }
+  }
+}

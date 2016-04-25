@@ -1,0 +1,135 @@
+
+/**
+ * Bootstrap Fonts
+ */
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot');
+  src: url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+  url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'),
+  url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+  url('../bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+/**
+ *Font Awesome Fonts
+ */
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../bower_components/font-awesome/fonts/fontawesome-webfont.eot?v=4.1.0');
+  src: url('../bower_components/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.1.0') format('embedded-opentype'),
+  url('../bower_components/font-awesome/fonts/fontawesome-webfont.woff?v=4.1.0') format('woff'),
+  url('../bower_components/font-awesome/fonts/fontawesome-webfont.ttf?v=4.1.0') format('truetype'),
+  url('../bower_components/font-awesome/fonts/fontawesome-webfont.svg?v=4.1.0#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/**
+* General font
+**/
+@font-face {
+    font-family:'OpenSans-Regular';
+    src: url('../assets/fonts/open-sans/OpenSans-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family:'OpenSans-Bold';
+    src: url('../assets/fonts/open-sans/OpenSans-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family:'OpenSans-Light';
+    src: url('../assets/fonts/open-sans/OpenSans-Light.ttf') format('truetype');
+}
+/**
+ * App-wide Styles
+ */
+
+.browserupgrade {
+     margin: 0.2em 0;
+     background: #ccc;
+     color: #000;
+     padding: 0.2em 0;
+}
+body {
+    font-family:"OpenSans-Regular", Helvetica, Arial, sans-serif;
+}
+header {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 0px;
+    border-bottom: 2px solid #e1e1e1;
+}
+
+h3 {
+    font-family: "OpenSans-Bold", Helvetica, Arial, sans-serif;
+    color: #2A4E68;
+}
+
+.dp-title {
+    font-family: "OpenSans-Bold", Helvetica, Arial, sans-serif;
+    color: #2A4E68;
+    font-size: 24px;
+}
+.dp-label{
+  font-size: 12px;
+  top: -5px;
+  position: relative;
+}
+
+.dp-label-completed{
+  background-color: #58B957;
+}
+.dp-label-in-progress{
+  background-color:  #0D5B9D;
+}
+.dp-label-none{
+  background-color: #999999;
+}
+.dp-label-pending{
+  background-color: #EFAC43;
+}
+
+.dp-link-title {
+    color:#2E729A;
+}
+.dp-link-title:hover {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.add-margin-top{
+  margin-top: 10px;
+}
+.dp-hr{
+  margin-bottom: 5px;
+}
+
+.dp-subtitle{
+  font-weight: bolder;
+}
+
+.dp-nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus{
+  background-color: #0D5B9D;
+}
+
+.progress-bar .sr-only{
+  position: relative;
+}
+
+.progress-bar[aria-valuenow="0"] {
+  color: #000;
+  min-width: 100%;
+  background: transparent;
+  box-shadow: none;
+}
+
+.compress-text{
+  max-height: 63px;
+  overflow: hidden;
+}
+
+.uncompress-text{
+  max-height: none !important;
+}

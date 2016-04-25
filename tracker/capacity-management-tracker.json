@@ -1,0 +1,33 @@
+{
+    "id": "0002",
+    "date": "05-04-2016",
+    "submitted_by": {
+        "name": "Shamail Tahir",
+        "email": "itzshamail@gmail.com"
+    },
+    "description": "Capacity Management",
+    "source": "capacity_management",
+    "status": "in-progress",
+    "tasks": [
+        "Service Catalog Standardization"
+    ],
+    "tasks_status": {
+        "Service Catalog Standardization": {
+            "cross-project spec": "service-catalog",
+            "gerrit-topic": "",
+            "xp_status": "in-progress",
+            "projects": [
+                "keystone"
+            ],
+            "projects_status": {
+                "keystone": {
+                    "blueprints": {
+                        "service-catalog-standards": "in-progress"
+                    },
+                    "spec": "http://specs.openstack.org/openstack/openstack-specs/specs/service-catalog.html",
+                    "spec_status": "completed"
+                }
+            }
+      }
+    }
+}

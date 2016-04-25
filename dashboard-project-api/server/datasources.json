@@ -1,0 +1,47 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "Patch": {
+    "name": "Patch",
+    "connector": "rest",
+    "operations": [
+      {
+        "template": {
+          "method": "GET",
+          "url": "https://review.openstack.org/changes/?q=topic:{topic}",
+          "headers": {
+            "accepts": "application/json",
+            "content-type": "application/json"
+          }
+        },
+        "functions": {
+          "list": [
+            "topic"
+          ],
+          "latestUpdate": [
+            "topic"
+          ]
+        }
+      }
+    ]
+  },
+  "Rst": {
+    "name": "Rst",
+    "connector": "rest",
+    "operations": [
+      {
+        "template": {
+          "method": "GET",
+          "url": "https://raw.githubusercontent.com/openstack/openstack-specs/master/specs/{file}"
+        },
+        "functions": {
+          "list": [
+            "file"
+          ]
+        }
+      }
+    ]
+  }
+}

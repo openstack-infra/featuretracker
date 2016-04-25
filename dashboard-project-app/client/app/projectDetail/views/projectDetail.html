@@ -1,0 +1,12 @@
+<div class="views-details">
+  <div ng-include="'/app/projectDetail/views/quickResume.html'"></div>
+  <div class="tasks container-fluid">
+    <div class="container">
+      <div ng-repeat="(key, task) in userStory.tasks_status"
+           ng-include="'/app/projectDetail/views/task.html'"></div>
+    </div>
+  </div>
+
+</div>
+
+

@@ -1,0 +1,16 @@
+{
+  "name": "UserStory",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "options": {},
+  "properties": {
+    "UserStory": {
+      "type": "array",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
