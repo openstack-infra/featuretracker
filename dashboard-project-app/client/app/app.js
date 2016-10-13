@@ -10,7 +10,7 @@ angular.module('dashboardProjectApp', [
   'lbServices'
 ])
   .config(function($urlRouterProvider, $locationProvider, LoopBackResourceProvider) {
-      LoopBackResourceProvider.setUrlBase('http://localhost:3004/api');
+      LoopBackResourceProvider.setUrlBase('http://local.userstory.openstack.org/api');
     //$urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode(true);

@@ -1,0 +1,8 @@
+{
+  "name" : "dashboard-api",
+  "script" : "server/server.js",
+  "watch"  : true,
+  "env_production" : {
+    "NODE_ENV": "production"
+  }
+}

@@ -3,7 +3,7 @@
 
 angular.module('dashboardProjectApp.constants', [])
 
-.constant('appConfig', {userRoles:['guest','user','admin']})
+.constant('appConfig', {userRoles:['guest','user','admin'],apiBaseUrl:'http://local.userstory.openstack.org/api'})
 
 ;
 })(angular);

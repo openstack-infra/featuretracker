@@ -1,0 +1,32 @@
+<VirtualHost *:80>
+   ServerAdmin webmaster@localhost
+   ServerName local.userstory.openstack.org
+ 
+   DocumentRoot /var/www/local.userstory.openstack.org
+
+   <Directory />
+       Options FollowSymLinks Includes ExecCGI
+       AllowOverride All
+       Order deny,allow
+       Allow from all
+   </Directory>
+ 
+   # angular application 	
+   ProxyRequests on
+   ProxyPass / http://localhost:8080/
+   # api	
+   <Location /api>
+       ProxyPass http://127.0.0.1:3004/api
+       ProxyPassReverse http://127.0.0.1:3004/api
+   </Location>
+   
+   ErrorLog ${APACHE_LOG_DIR}/error.log
+ 
+   # Possible values include: debug, info, notice, warn, error, crit,
+   # alert, emerg.
+   LogLevel warn
+ 
+   CustomLog ${APACHE_LOG_DIR}/access.log combined
+ 
+</VirtualHost>
+

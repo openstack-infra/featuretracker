@@ -4,7 +4,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "build-sdk": "mkdir js; lb-ng server/server.js js/lbServices.js",
+    "build-sdk": "mkdir -p js; lb-ng server/server.js js/lbServices.js",
     "pretest": "jshint .",
     "posttest": "nsp check"
   },
