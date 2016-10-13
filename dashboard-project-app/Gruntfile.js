@@ -369,7 +369,8 @@ module.exports = function (grunt) {
             'bower_components/**/*',
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
-            'index.html'
+            'index.html',
+            'app/**/*'
           ]
         }, {
           expand: true,
@@ -755,7 +756,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build', [
-   // 'clean:dist',
+    'clean:dist',
     'concurrent:pre',
     'concurrent:dist',
     'injector',
