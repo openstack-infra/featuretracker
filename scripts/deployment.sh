@@ -3,7 +3,7 @@
 echo "reading config ..." >&2
 source deployment.cfg;
 RELEASE_DIR=~/deployments/$(date '+%d-%m-%Y-%H-%M-%S')
-
+mkdir -p $RELEASE_DIR;
 sudo chmod 770 -R $RELEASE_DIR;
 sudo chown :www-data -R $RELEASE_DIR;
 echo "cloning repo";
@@ -29,7 +29,7 @@ pm2 delete all;
 echo "starting api";
 cd $RELEASE_DIR/dashboard-project-api && pm2 start process.json --env production;
 echo "starting app";
-cd /var/www/userstory.openstack.org && pm2 start process.json --env production;
+cd $WEB_DIR && pm2 start process.json --env production;
 echo "saving process ...";
 pm2 save;
 
@@ -43,5 +43,3 @@ sudo ln -s $RELEASE_DIR/dashboard-project-app/dist/ $WEB_DIR;
 sudo ln -s $RELEASE_DIR/dashboard-project-app/node_modules $WEB_DIR/node_modules;
 echo 'restarting APACHE ...';
 sudo service apache2 start;
-
-
