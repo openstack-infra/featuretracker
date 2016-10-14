@@ -9,8 +9,8 @@ angular.module('dashboardProjectApp', [
   'ui.bootstrap',
   'lbServices'
 ])
-  .config(function($urlRouterProvider, $locationProvider, LoopBackResourceProvider) {
-      LoopBackResourceProvider.setUrlBase('http://local.userstory.openstack.org/api');
+  .config(function($urlRouterProvider, $locationProvider, LoopBackResourceProvider, appConfig) {
+      LoopBackResourceProvider.setUrlBase(appConfig.apiBaseUrl);
     //$urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode(true);

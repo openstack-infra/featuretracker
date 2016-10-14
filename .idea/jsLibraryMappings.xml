@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$/dashboard-project-api" libraries="{userstory.openstack.org/dashboard-project-api/node_modules}" />
+    <file url="file://$PROJECT_DIR$/dashboard-project-app" libraries="{userstory.openstack.org/dashboard-project-app/node_modules}" />
+  </component>
+</project>

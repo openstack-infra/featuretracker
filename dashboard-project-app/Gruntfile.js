@@ -311,11 +311,25 @@ module.exports = function (grunt) {
         wrap: true,
         configPath: '<%= yeoman.server %>/config/environment/shared'
       },
-      app: {
+      development: {
         constants: function() {
-          return {
-            appConfig: require('./' + grunt.config.get('ngconstant.options.configPath'))
-          };
+            var config = require('./' + grunt.config.get('ngconstant.options.configPath'))
+            config.apiBaseUrl = 'http://localhost:3004';
+            return { appConfig : config};
+        }
+      },
+      local: {
+        constants: function() {
+          var config = require('./' + grunt.config.get('ngconstant.options.configPath'))
+          config.apiBaseUrl = 'http://local.userstory.openstack.org/api';
+          return { appConfig : config};
+        }
+      },
+      production: {
+        constants: function() {
+          var config = require('./' + grunt.config.get('ngconstant.options.configPath'))
+          config.apiBaseUrl = 'http://featuretracker.openstack.org/api';
+          return { appConfig : config};
         }
       }
     },
@@ -382,6 +396,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             'package.json',
+	    'process.json',
             '<%= yeoman.server %>/**/*',
             '!<%= yeoman.server %>/config/local.env.sample.js'
           ]
@@ -419,8 +434,8 @@ module.exports = function (grunt) {
 
     // Run some tasks in parallel to speed up the build process
     concurrent: {
-      pre: [
-        'ngconstant'
+      pre:[
+
       ],
       server: [
         'newer:babel:client',
@@ -626,8 +641,9 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('serve', function (target) {
+
     if (target === 'dist') {
-      return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
+      return grunt.task.run(['build:production', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
     }
 
     if (target === 'debug') {
@@ -645,6 +661,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
      // 'clean:server',
+      'ngconstant:development',
       'env:all',
       'concurrent:pre',
       'concurrent:server',
@@ -690,7 +707,7 @@ module.exports = function (grunt) {
 
       if (option === 'prod') {
         return grunt.task.run([
-          'build',
+          'build:production',
           'env:all',
           'env:prod',
           'express:prod',
@@ -755,25 +772,34 @@ module.exports = function (grunt) {
     ]);
   });
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'concurrent:pre',
-    'concurrent:dist',
-    'injector',
-    'wiredep:client',
-    'useminPrepare',
-    'postcss',
-    'ngtemplates',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
-    'babel:server',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'filerev',
-    'usemin'
-  ]);
+  grunt.registerTask('build', function (target) {
+
+    if(typeof(target) == 'undefined')
+      target = 'development';
+
+    var tasks =  [
+      'clean:dist',
+      'ngconstant:'+target,
+      'concurrent:pre',
+      'concurrent:dist',
+      'injector',
+      'wiredep:client',
+      'useminPrepare',
+      'postcss',
+      'ngtemplates',
+      'concat',
+      'ngAnnotate',
+      'copy:dist',
+      'babel:server',
+      'cdnify',
+      'cssmin',
+      'uglify',
+      'filerev',
+      'usemin'
+    ]
+
+    return grunt.task.run(tasks);
+  });
 
   grunt.registerTask('default', [
     'newer:jshint',

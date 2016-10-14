@@ -1,8 +1,8 @@
 <VirtualHost *:80>
    ServerAdmin webmaster@localhost
-   ServerName local.userstory.openstack.org
+   ServerName <%= @vhost_name %>
  
-   DocumentRoot /var/www/local.userstory.openstack.org
+   DocumentRoot /var/www/<%= @vhost_name %>
 
    <Directory />
        Options FollowSymLinks Includes ExecCGI
@@ -13,11 +13,11 @@
  
    # angular application 	
    ProxyRequests on
-   ProxyPass / http://localhost:8080/
+   ProxyPass / http://localhost:<%= @app_port %>/
    # api	
    <Location /api>
-       ProxyPass http://127.0.0.1:3004/api
-       ProxyPassReverse http://127.0.0.1:3004/api
+       ProxyPass http://127.0.0.1:<%= @api_port %>/api
+       ProxyPassReverse http://127.0.0.1:<%= @api_port %>/api
    </Location>
    
    ErrorLog ${APACHE_LOG_DIR}/error.log

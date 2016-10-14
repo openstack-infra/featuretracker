@@ -1,3 +1,7 @@
+$vhost_name = 'local.userstory.openstack.org'
+$app_port   = 8080
+$api_port   = 3004
+	
 $main_packages = [
   'curl',
   'wget',
@@ -68,7 +72,7 @@ class { '::apache':
 
 ::apache::listen { '80': }
 
-::apache::vhost::custom { 'local.userstory.openstack.org':
+::apache::vhost::custom { $vhost_name:
     priority => '50',
     content  => template('site/vhost.erb'),
     require => [

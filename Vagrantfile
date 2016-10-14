@@ -63,10 +63,6 @@ Vagrant.configure(2) do |config|
     #puppet.options = "--verbose --debug"
   end
 
-  #config.vm.provision "install_mongo_db", type:"shell" do |s|
-  #  s.path = "scripts/install_mongo_db.sh"
-  #end
-
   config.vm.provision "install_api", type:"shell" do |s|
     s.path = "scripts/install_api.sh"
   end
