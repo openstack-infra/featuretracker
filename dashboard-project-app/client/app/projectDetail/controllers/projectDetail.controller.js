@@ -2,8 +2,8 @@
 (function(){
 
   angular.module('dashboardProjectApp')
-    .controller('projectDetailController', ['$scope','$state', 'UserStory'/*, 'tasksService', 'tasks', 'task'*/,
-      function($scope, $state, UserStory/*, tasksService, tasks, task*/) {
+    .controller('projectDetailController', ['$scope','$state', 'UserStory',
+      function($scope, $state, UserStory) {
 
         $scope.taskId = $state.params.id;
         $scope.openTasks = {};

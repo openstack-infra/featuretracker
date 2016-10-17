@@ -6,12 +6,6 @@ angular.module('dashboardProjectApp')
     $stateProvider
       .state('projectDetail', {
         url: '/projectDetail/:id',
-       /* resolve: {
-          userStory: ['userStoryService',
-         function(userStoryService) {
-         return userStoryService.getTasks();
-         }]
-         },*/
         templateUrl: 'app/projectDetail/views/projectDetail.html',
         controller: 'projectDetailController'
       })

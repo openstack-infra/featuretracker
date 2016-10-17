@@ -65,13 +65,13 @@
     var story = value.split("-");
     return '<a class="dp-link-title" href="projectDetail/'+ story[0] +'">' + story[1] + '</a>';
   }
-  function progressBar(value, row) {
+  function progressBar(percentage, row) {
 
     return '<div class="progress dp-progress">'+
       '<div class="progress-bar progress-bar-success progress-bar-striped"'+
-      'role="progressbar" aria-valuenow="'+value+'" aria-valuemin="0"' +
-      'aria-valuemax="100" style="width: '+value+'%">'+
-      '<span class="sr-only">'+value+'%</span>' +
+      'role="progressbar" aria-valuenow="'+percentage+'" aria-valuemin="0"' +
+      'aria-valuemax="100" style="width: '+percentage+'%">'+
+      '<span class="sr-only">'+row.progressLabel+'</span>' +
       '</div>' +
       '</div>';
   }

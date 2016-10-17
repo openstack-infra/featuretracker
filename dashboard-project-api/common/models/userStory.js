@@ -8,77 +8,19 @@ module.exports = function(UserStory) {
   var async = require("async");
   var htmlparser = require("htmlparser");
   var cheerio = require('cheerio');
+  const SPEC_URL = "http://specs.openstack.org/openstack/openstack-user-stories/user-stories/proposed/";
 
 
   var blueprintsResume = [];
 
 
-  var getAllfiles = function(getPercentage){
-
+  var getAllfiles = function(){
     return  fs.readdirSync(route)
       .map(function(file){
         var route = "../tracker/" + file ;
-        var data = JSON.parse(fs.readFileSync(route));
-        var parsedData;
-
-        if(getPercentage){
-            parsedData = getTotalPercentage(data);
-            data.blueprintList = parsedData;
-        }
-
-        return data;
+        var userStory = JSON.parse(fs.readFileSync(route));
+        return userStory;
       });
-
-  }
-
-  //get completed percentage of all the userstories
-  var getTotalPercentage = function(userStory){
-
-    blueprintsResume.completed = 0;
-    blueprintsResume.total = 0;
-    var blueprintList = [];
-
-      userStory.tasks.forEach(function (taskName, index, array) {
-
-        var task = userStory.tasks_status[taskName];
-
-        task.projects.forEach(function (projectName, index, array) {
-
-          var blueprints = task.projects_status[projectName].blueprints;
-          var blueprintNames = Object.keys(blueprints);
-          blueprintList.push(blueprintNames);
-
-          blueprintNames.forEach(function (blueprintName, index, array) {
-
-            if (blueprints[blueprintName] == 'completed')
-              blueprintsResume.completed = blueprintsResume.completed + 1;
-
-            blueprintsResume.total = blueprintsResume.total + 1;
-
-          })
-
-        })
-
-      })
-
-    var finalPercentage = Math.round((blueprintsResume.completed*100)/blueprintsResume.total)
-      blueprintList.push([{percentage:(finalPercentage)}]);
-      return blueprintList;
-
-  }
-
-  //get completed percentage of a User story
-  var getPercentage = function(blueprints){
-    var total = blueprints.length;
-    var complete = 0;
-
-    blueprints.forEach(function(element, index, array) {
-
-      if(element == 'completed')
-        complete = complete + 1;
-    })
-    return Math.round((complete*100)/total);
-
   }
 
   var getFileById = function(id){
@@ -99,163 +41,95 @@ module.exports = function(UserStory) {
 
   };
 
-  var getDetailedUri = function(source) {
-    var base = 'http://specs.openstack.org/openstack/openstack-user-stories/user-stories/proposed/';
+  //get all the completed blueprints
+  var getbluePrintResume = function(userStory){
+    var blueprintsResume = {
+          completed: 0,
+          total: 0
+    }
 
-    return base + source + '.html';
+    userStory.tasks.forEach(function (taskName, index, array) {
 
-  }
+        var task = userStory.tasks_status[taskName];
 
-  var parseUserStory = function(id){
-    var data = [];
-    return function(callback){
-      var file = getFileById(id);
+        task.projects.forEach(function (projectName, index, array) {
 
-      var Patch = app.models.Patch;
+          var blueprints = task.projects_status[projectName].blueprints;
+          var blueprintNames = Object.keys(blueprints);
 
-      Patch.latestUpdate(file.source, function(err, response) {
+          blueprintNames.forEach(function (blueprintName, index, array) {
 
-        var lastUpdate = '';
+            if (blueprints[blueprintName] == 'completed')
+              blueprintsResume.completed = blueprintsResume.completed + 1;
 
-        if(response){
-          response = JSON.parse(response.substring(5));
-          response.forEach( function each (element){
-            data.push(
-              {
-                latestDate: element.updated,
-              });
-          });
+            blueprintsResume.total = blueprintsResume.total + 1;
 
-          data = data.sort();
-          lastUpdate =  data.shift();
+          })
 
-          if(lastUpdate){
-            lastUpdate = lastUpdate.latestDate;
-          }
-        }
-
-        var userStory = {
-          title:file.description,
-          description:'',
-          status:file.status,
-          showDetailedUri:getDetailedUri(file.source),
-          submittedBy:file.submitted_by.name,
-          submittedByEmail:file.submitted_by.email,
-          createdOn:file.date,
-          updatedOn:lastUpdate,
-          id:file.id,
-          percentageComplete:''
-        };
-        callback(null, userStory, file.tasks, file.tasks_status);
+        })
 
       })
 
-    }
+    blueprintsResume.percentage = (blueprintsResume.completed/blueprintsResume.total)*100;
+    
+    return blueprintsResume;
   }
 
+  //get the field lastupdated for a usterStory 
+  var getLastUpdated = function(userStory, cb){
+    var Patch = app.models.Patch;
+    var lastUpdate = '';
 
-  var getTaskDescription = function(task, callback){
+    Patch.latestUpdate(userStory.source, function (err, response, next) {
+      response = JSON.parse(response.substring(5));
 
-    var Rst = app.models.Rst;
-    var spec = task['cross-project spec'] + '.rst'
+      console.log('response', response);
 
-    Rst.list(spec, function(err, data){
+      if(response.length > 0){
+        lastUpdate =  response.map( function each (element){
+                        return element.updated
+                      }).sort().shift();
+        var arrayLastUpdate = lastUpdate.split(' ');
+        lastUpdate = arrayLastUpdate[0];
 
-      var html_content = markdown.toHTML(data);
-      var $ = cheerio.load(html_content);
-
-      var index = null;
-      //Find the title
-      var description = $('h1').each(function(i, elem) {
-        if(elem.children[0].data == 'Problem description'){
-          index = i;
-        }
-      });
-
-      //get Text description
-      if(index != null){
-        description = $($('h1')[index]).next().text()
-      }else{
-        description = '';
       }
 
-      callback(null, description);
+      cb(null, lastUpdate)
 
     })
 
   }
 
-  var getUriTask = function(spec){
-    var base = 'https://github.com/openstack/openstack-specs/blob/master/specs/';
 
-    return base + spec + '.rst';
-  }
+  // Parse data from userStory
+  var parseUserStory = function(userStory, callback){
+    
+      async.waterfall([function(cb){
 
-  var parseTask = function(originalTask, callback){
+        getLastUpdated(userStory, cb)
 
-    getTaskDescription(originalTask, function(err, description){
-      originalTask.description = description;
-      originalTask.url = getUriTask(originalTask['cross-project spec']);
-      originalTask.xp_status = originalTask.xp_status;
-      callback(null, originalTask)
-    })
+      },function(lastUpdated, cb){
+        userStory.updatedOn = lastUpdated;
+        userStory.showDetailedUri = SPEC_URL + userStory.source + '.html';
+        userStory.createdOn = userStory.date;
+        userStory.completed = getbluePrintResume(userStory);
 
-  }
+        cb(null, userStory);
+              
+        },function(userStory, cb){
 
+          var tasksName = userStory.tasks;
+          var tasks = userStory.tasks_status;
 
-  var parseProject = function(originalProject, callback){
+          parseTasks(userStory, tasksName, tasks, cb)
 
-    var urlArray = originalProject.spec.split('/');
-    var nameArray = urlArray[urlArray.length-1].split('.')
-    originalProject.spec_name = nameArray[0];
-
-    callback(null, originalProject)
-  }
-
-
-  var parseBlueprint = function(originalBlueprint, blueprintName, projectName, callback){
-    var Blueprint = app.models.Blueprint;
-    var Patch = app.models.Patch;
-
-    var status = originalBlueprint;
-
-    Blueprint.url(projectName, blueprintName, function(err, uri){
-
-      blueprintsResume.push(status)
-
-      blueprintsResume.complete = blueprintsResume.total +1 ;
-
-
-      Patch.list(blueprintName, function(err, response) {
-
-        var data = [];
-
-        response = JSON.parse(response.substring(5));
-
-        response.forEach(function each(element) {
-          data.push(
-            {
-              url: "https://review.openstack.org/#/c/" + element._number,
-              name: element.subject
-            });
-        });
-
-        originalBlueprint = {
-          name: blueprintName.replace(/-/g, " "),
-          uri: uri,
-          status: status,
-          review_link:data
-        }
-        callback(null, originalBlueprint)
-
+        }],function(err,userStory){
+          callback(null, userStory);
       })
-
-    })
-
   }
 
 
-  //TODO: APPLY async.waterfall
+   //??
   var parseTasks = function(userStory, tasksNames, tasks,  callback) { //get tasks
 
     var tmpTasks = {};
@@ -308,7 +182,7 @@ module.exports = function(UserStory) {
       userStory.tasks = tasksNames;
       userStory.tasks_status = tmpTasks;
 
-      userStory.percentageComplete = getPercentage(blueprintsResume)
+      //userStory.percentageComplete = getPercentage(blueprintsResume)
 
       callback(null, userStory);
 
@@ -316,104 +190,146 @@ module.exports = function(UserStory) {
 
   }
 
+
+//?
+
+  var getTaskDescription = function(task, callback){
+
+    var Rst = app.models.Rst;
+    var spec = task['cross-project spec'] + '.rst'
+
+    Rst.list(spec, function(err, data){
+
+      var html_content = markdown.toHTML(data);
+      var $ = cheerio.load(html_content);
+
+      var index = null;
+      //Find the title
+      var description = $('h1').each(function(i, elem) {
+        if(elem.children[0].data == 'Problem description'){
+          index = i;
+        }
+      });
+
+      //get Text description
+      if(index != null){
+        description = $($('h1')[index]).next().text()
+      }else{
+        description = '';
+      }
+
+      callback(null, description);
+
+    })
+
+  }
+//?
+  var getUriTask = function(spec){
+    var base = 'https://github.com/openstack/openstack-specs/blob/master/specs/';
+
+    return base + spec + '.rst';
+  }
+//?
+  var parseTask = function(originalTask, callback){
+
+    getTaskDescription(originalTask, function(err, description){
+      originalTask.description = description;
+      originalTask.url = getUriTask(originalTask['cross-project spec']);
+      callback(null, originalTask)
+    })
+
+  }
+//?
+
+  var parseProject = function(originalProject, callback){
+
+    var urlArray = originalProject.spec.split('/');
+    var nameArray = urlArray[urlArray.length-1].split('.')
+    originalProject.spec_name = nameArray[0];
+
+    callback(null, originalProject)
+  }
+
+//?
+  var parseBlueprint = function(originalBlueprint, blueprintName, projectName, callback){
+    var Blueprint = app.models.Blueprint;
+    var Patch = app.models.Patch;
+
+    var status = originalBlueprint;
+
+    Blueprint.url(projectName, blueprintName, function(err, uri){
+
+      blueprintsResume.push(status)
+
+      blueprintsResume.complete = blueprintsResume.total +1 ;
+
+
+      Patch.list(blueprintName, function(err, response) {
+
+        var data = [];
+
+        response = JSON.parse(response.substring(5));
+
+        response.forEach(function each(element) {
+          data.push(
+            {
+              url: "https://review.openstack.org/#/c/" + element._number,
+              name: element.subject
+            });
+        });
+
+        originalBlueprint = {
+          name: blueprintName.replace(/-/g, " "),
+          uri: uri,
+          status: status,
+          review_link:data
+        }
+        callback(null, originalBlueprint)
+
+      })
+
+    })
+
+  }
+
+ 
+
   UserStory.on('attached',function(){
 
     UserStory.findById = function(id, params, cb){
 
-      async.waterfall([
-        parseUserStory(id),
-        parseTasks
-      ], function (err, result) {
-        cb(null,result)
-      });
-
-    };
+      var userStory = getFileById(id);
+      parseUserStory(userStory, cb);
+      
+    };//end find by id
 
     UserStory.find = function(params, cb){
-        var Patch = app.models.Patch;
-      //get all files
-        var userStories = getAllfiles(true);
-        var percentage;
-        var blueprintKeys;
-        var dateList = [];
-        //var response = userStories;
+        var userStories = getAllfiles();
 
-        var result;
+        async.mapSeries(userStories, parse, cb);
 
-        // looking dates
-        var lookingDates = function (id, blueprintKeys) {
-            blueprintKeys.forEach(function each (key) {
-                var data = [];
-                Patch.latestUpdate(key, function (err, response, next) {
+        function parse(userStory, callback) {
 
-                    response = JSON.parse(response.substring(5));
-                    async.waterfall([
-                        function createOutput(next){
-                            response.forEach( function each (element){
-                                data.push(
-                                {
-                                    latestDate: element.updated,
-                                });
-                            });
-                            next();
-                        },
-                        function sendData (next) {
-                            data = data.sort();
-                            var lastUpdate =  data.shift();
-                            if(lastUpdate !== undefined) {
-                                dateList.push({
-                                    id: id,
-                                    value: lastUpdate.latestDate
-                                });
-                            }
-                            next;
-                        }
-                    ], next);
-                });
-            });
+          async.waterfall([function(cb){
+            getLastUpdated(userStory, cb)
+          },function(lastUpdated, cb){
+          
+            var itemResult = {
+              completed: getbluePrintResume(userStory),
+              dateCreated: userStory.date,
+              lastUpdate: lastUpdated,
+              userStory: userStory.description,
+              id:userStory.id
+            };
+
+            cb(null, itemResult);
+              
+          }],function(err,result){
+              callback( err, result);
+          })
         }
+    };//End find
 
-        function keysrt(key,asc) {
-            return function(a,b){
-                return asc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
-            }
-        }
-
-        async.waterfall ([
-            function readStories (next) {
-                userStories.forEach (function eachStory (story, x) {
-                    //console.log(story.blueprintList);
-                    //TODO change the array of percentage
-                    percentage = (story.blueprintList).pop();
-                    blueprintKeys = story.blueprintList;
-                    result = lookingDates((story.id), blueprintKeys);
-                    story.percentage = percentage[0].percentage;
-                });
-                next();
-            },
-            function resumeDate (next){
-                setTimeout(function(){
-                    dateList = dateList.sort(keysrt('value'));
-                    userStories.forEach (function eachStory (story) {
-                        dateList.forEach (function eachDate (dateElement){
-                            if(dateElement.id === story.id){
-                                story.latestUpdate = dateList
-                            }
-                        });
-                    });
-                    cb(null,userStories);
-                }, 1000);
-
-                next;
-            },
-            function sendResult(next){
-                //cb(null,userStories);
-                next;
-            }
-        ]);
-
-
-    }
   })
 
 };
