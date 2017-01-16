@@ -314,7 +314,7 @@ module.exports = function (grunt) {
       development: {
         constants: function() {
             var config = require('./' + grunt.config.get('ngconstant.options.configPath'))
-            config.apiBaseUrl = 'http://localhost:3004';
+            config.apiBaseUrl = 'http://localhost:3004/api';
             return { appConfig : config};
         }
       },
