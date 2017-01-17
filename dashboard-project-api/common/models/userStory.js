@@ -68,11 +68,11 @@ module.exports = function(UserStory) {
       })
 
     blueprintsResume.percentage = (blueprintsResume.completed/blueprintsResume.total)*100;
-    
+
     return blueprintsResume;
   }
 
-  //get the field lastupdated for a usterStory 
+  //get the field lastupdated for a usterStory
   var getLastUpdated = function(userStory, cb){
     var Patch = app.models.Patch;
     var lastUpdate = '';
@@ -80,12 +80,10 @@ module.exports = function(UserStory) {
     Patch.latestUpdate(userStory.source, function (err, response, next) {
       response = JSON.parse(response.substring(5));
 
-      console.log('response', response);
-
       if(response.length > 0){
         lastUpdate =  response.map( function each (element){
                         return element.updated
-                      }).sort().shift();
+                    }).sort().pop();
         var arrayLastUpdate = lastUpdate.split(' ');
         lastUpdate = arrayLastUpdate[0];
 
@@ -100,7 +98,7 @@ module.exports = function(UserStory) {
 
   // Parse data from userStory
   var parseUserStory = function(userStory, callback){
-    
+
       async.waterfall([function(cb){
 
         getLastUpdated(userStory, cb)
@@ -112,7 +110,7 @@ module.exports = function(UserStory) {
         userStory.completed = getbluePrintResume(userStory);
 
         cb(null, userStory);
-              
+
         },function(userStory, cb){
 
           var tasksName = userStory.tasks;
@@ -289,7 +287,7 @@ module.exports = function(UserStory) {
 
   }
 
- 
+
 
   UserStory.on('attached',function(){
 
@@ -302,8 +300,7 @@ module.exports = function(UserStory) {
       }else{
         cb('File does not exist', null);
       }
-      
-      
+
     };//end find by id
 
     UserStory.find = function(params, cb){
@@ -316,7 +313,7 @@ module.exports = function(UserStory) {
           async.waterfall([function(cb){
             getLastUpdated(userStory, cb)
           },function(lastUpdated, cb){
-          
+
             var itemResult = {
               completed: getbluePrintResume(userStory),
               dateCreated: userStory.date,
@@ -326,7 +323,7 @@ module.exports = function(UserStory) {
             };
 
             cb(null, itemResult);
-              
+
           }],function(err,result){
               callback( err, result);
           })
