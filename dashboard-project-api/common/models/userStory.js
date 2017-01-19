@@ -32,11 +32,8 @@ module.exports = function(UserStory) {
       return item.id == id;
     })
 
-    if(file.length > 0){
-      file = file[0];
-    }else{
-      file = 'The file with id: '+ id +' does not exist.'
-    }
+    file = (file.length > 0)?file[0]:null;
+
     return file;
 
   };
@@ -297,7 +294,12 @@ module.exports = function(UserStory) {
     UserStory.findById = function(id, params, cb){
 
       var userStory = getFileById(id);
-      parseUserStory(userStory, cb);
+
+      if(userStory){
+        parseUserStory(userStory, cb);
+      }else{
+        cb('File does not exist', null);
+      }
 
     };//end find by id
 
