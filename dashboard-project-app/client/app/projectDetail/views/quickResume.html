@@ -3,8 +3,8 @@
     <div class="well frm-well">
       <div class="row">
         <div class="col-xs-11">
-          <div class="dp-title ">
-            {{userStory.description}}
+          <div class="dp-title" data-toggle="tooltip" title="{{userStory.description}}">
+            {{userStory.shortDescription}}
               <span class="dp-label label label-primary dp-label-{{userStory.status}}">
                 {{userStory.status  | removeDashes | capitalize}}
               </span>

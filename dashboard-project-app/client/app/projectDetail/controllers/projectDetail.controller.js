@@ -1,5 +1,5 @@
 'use strict';
-(function(){
+(function () {
 
   angular.module('dashboardProjectApp')
     .controller('projectDetailController', ['$scope','$state', 'UserStory', '$location',
@@ -39,19 +39,30 @@
         $scope.actualProject = {};
 
         function getFile() {
+            UserStory.findById({id:$scope.taskId},
+                function success(userStory) {
+                    $scope.userStory  = userStory;
 
-          UserStory.findById({id:$scope.taskId},
-            function success(userStory) {
-              $scope.userStory  = userStory;
+                    // Formating User Story name
+                     if ((userStory.description).length > 100) {
+                         $scope.userStory.shortDescription = userStory.
+                         description.substr(0,50) + " ...";
+                     }
+                     else {
+                         $scope.userStory.shortDescription = userStory.
+                         description;
+                     }
 
-                $scope.userStory.updatedOn =  moment($scope.userStory.updatedOn).format("MM-DD-YYYY");
-                for(var key in $scope.userStory.tasks_status) {
-                  $scope.actualProject[key] = $scope.userStory.tasks_status[key].projects[0]
+                     $scope.userStory.updatedOn =  moment($scope.userStory.
+                         updatedOn).format("MM-DD-YYYY");
+                     for(var key in $scope.userStory.tasks_status) {
+                         $scope.actualProject[key] = $scope.userStory.
+                         tasks_status[key].projects[0]
+                    }
+                }, function onError(error){
+                    $location.path('/projectDetail/notFound/' + $scope.taskId);
                 }
-
-            }, function onError(error){
-                $location.path('/projectDetail/notFound/' + $scope.taskId);
-            });
+            );
         };
 
         $scope.selectProject = function(keyProject,  idTask){
@@ -76,7 +87,8 @@
       }])
   .filter('capitalize', function() {
     return function(input) {
-      return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+      return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).
+      toLowerCase() : '';
     }
   })
   .filter('removeDashes', function() {

@@ -23,3 +23,9 @@
 .fixed-table-toolbar .bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns{
     margin-bottom: 25px;
 }
+.fixed-table-container tbody td {
+    max-width:200px; /* Customise it accordingly */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
