@@ -42,3 +42,29 @@
 
 table tr.separator { height: 30px; }
 
+.big-title{
+  font-size: 80px;
+  text-align: center;
+  padding-top: 40px;
+  font-weight: bolder;
+  color: #767676;
+}
+
+.big-subtitle{
+  text-align: center;
+    font-size: 22px;
+    font-weight: normal;
+    color: #767676;
+}
+
+.focus-title{
+    font-weight: bolder;
+    color: #414141;
+}
+
+.middle-subtitle{
+  text-align: center;
+    font-size: 16px;
+    padding-top: 10px;
+    color: #767676;
+}

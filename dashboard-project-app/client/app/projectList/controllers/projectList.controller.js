@@ -12,20 +12,26 @@ angular.module('dashboardProjectApp').controller('projectListCtrl', function(
             new Promise(function(resolve, reject) {
                 var stringDate, realDate;
 
+                
                 userStories.forEach(function each (story) {
-                    if(story.latestUpdate !== undefined) {
-                        lastUpdate = moment(story.latestUpdate[0].value).format("MM-DD-YYYY");
+
+                    console.log('userStories', story);
+                    if(story.lastUpdate !== '') {
+                        lastUpdate = moment(story.lastUpdate, "YYYY-MM-DD").format("MM-DD-YYYY");
                     } else {
-                        lastUpdate = moment(story.date, "DD-MM-YYYY").format("MM-DD-YYYY");
+                        lastUpdate = moment(story.dateCreated, "DD-MM-YYYY").format("MM-DD-YYYY");
                     }
                     data.push(
                         {
-                            userStory: story.id+'-'+story.description,
-                            dateCreated: moment(story.date, "DD-MM-YYYY").format("MM-DD-YYYY"),
+                            userStory: story.id+'-'+story.userStory,
+                            dateCreated: moment(story.dateCreated, "DD-MM-YYYY").format("MM-DD-YYYY"),
                             lastUpdate: lastUpdate,
-                            completed: story.percentage
+                            progressPercentage: story.completed.percentage,
+                            progressLabel: story.completed.completed + ' / ' + story.completed.total
                         }
                     )
+
+                    console.log('data', data);
                     resolve(data);
                 });
             })

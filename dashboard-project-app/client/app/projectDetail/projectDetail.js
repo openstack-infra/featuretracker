@@ -1,19 +1,25 @@
 'use strict';
 
 angular.module('dashboardProjectApp')
-  .config(function ($stateProvider) {
+  .config(function ($stateProvider, $urlRouterProvider) {
 
+ 
     $stateProvider
-      .state('projectDetail', {
+
+    .state('error', {
+        url: '/projectDetail/notFound/:id',
+        templateUrl: 'app/projectDetail/views/notFound.html',
+        controller: function($scope, $state){
+        	$scope.id = $state.params.id;
+        }
+    })
+
+
+    .state('projectDetail', {
         url: '/projectDetail/:id',
-       /* resolve: {
-          userStory: ['userStoryService',
-         function(userStoryService) {
-         return userStoryService.getTasks();
-         }]
-         },*/
         templateUrl: 'app/projectDetail/views/projectDetail.html',
         controller: 'projectDetailController'
-      })
+    })
+     
 
   });
