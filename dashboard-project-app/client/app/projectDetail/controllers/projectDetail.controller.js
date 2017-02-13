@@ -53,8 +53,17 @@
                          description;
                      }
 
-                     $scope.userStory.updatedOn =  moment($scope.userStory.
-                         updatedOn).format("MM-DD-YYYY");
+                    $scope.userStory.createdOn = moment($scope.userStory.
+                        createdOn, "DD-MM-YYYY").format("MM-DD-YYYY");
+
+                     if($scope.userStory.updatedOn !=='') {
+                         $scope.userStory.updatedOn =  moment($scope.userStory.
+                             updatedOn, "DD-MM-YYYY").format("MM-DD-YYYY");
+                     } else {
+                         $scope.userStory.updatedOn =  moment($scope.userStory.
+                             createdOn, "DD-MM-YYYY").format("MM-DD-YYYY");
+                     }
+
                      for(var key in $scope.userStory.tasks_status) {
                          $scope.actualProject[key] = $scope.userStory.
                          tasks_status[key].projects[0]
