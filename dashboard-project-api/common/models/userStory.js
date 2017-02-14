@@ -8,11 +8,11 @@ module.exports = function(UserStory) {
   var async = require("async");
   var htmlparser = require("htmlparser");
   var cheerio = require('cheerio');
+  var xssFilters = require("xss-filters");
   const SPEC_URL = "http://specs.openstack.org/openstack/openstack-user-stories/user-stories/proposed/";
 
 
   var blueprintsResume = [];
-
 
   var getAllfiles = function(){
     return  fs.readdirSync(route)
@@ -29,11 +29,12 @@ module.exports = function(UserStory) {
     var userStories = getAllfiles();
     //filter by Id
     var file = userStories.filter(function(item){
-      return item.id == id;
+        // VALIDATE IF A VALID ID IS COMING!
+        console.log("my id",xssFilters.inHTMLData(id));
+      return item.id == xssFilters.inHTMLData(id);
     })
 
     file = (file.length > 0)?file[0]:null;
-
     return file;
 
   };
@@ -48,15 +49,19 @@ module.exports = function(UserStory) {
     userStory.tasks.forEach(function (taskName, index, array) {
 
         var task = userStory.tasks_status[taskName];
+        console.log("La tarea es:", task);
 
         task.projects.forEach(function (projectName, index, array) {
-
-          var blueprints = task.projects_status[projectName].blueprints;
+            console.log("The project name is, ", projectName);
+            //VALIDATE projectName EXISTS
+          var blueprints = task.projects_status[xssFilters.inHTMLData(projectName)].blueprints;
           var blueprintNames = Object.keys(blueprints);
 
           blueprintNames.forEach(function (blueprintName, index, array) {
-
-            if (blueprints[blueprintName] == 'completed')
+              console.log("single blueprint: ",blueprintName);
+              console.log("el nombre del blue print es: ", blueprints[blueprintName]);
+              // VALIDATE PROPERLY if this statement is not true
+            if (blueprints[xssFilters.inHTMLData(blueprintName)] == 'completed')
               blueprintsResume.completed = blueprintsResume.completed + 1;
 
             blueprintsResume.total = blueprintsResume.total + 1;
@@ -316,10 +321,10 @@ module.exports = function(UserStory) {
 
             var itemResult = {
               completed: getbluePrintResume(userStory),
-              dateCreated: userStory.date,
-              lastUpdate: lastUpdated,
-              userStory: userStory.description,
-              id:userStory.id
+              dateCreated: xssFilters.inHTMLData(userStory.date),
+              lastUpdate: xssFilters.inHTMLData(lastUpdated),
+              userStory: xssFilters.inHTMLData(userStory.description),
+              id:xssFilters.inHTMLData(userStory.id)
             };
 
             cb(null, itemResult);
