@@ -67,11 +67,11 @@
                          $scope.actualProject[key] = $scope.userStory.
                          tasks_status[key].projects[0]
                     }
-                }, function onError(error){
+                }, function onError(){
                     $location.path('/projectDetail/notFound/' + $scope.taskId);
                 }
             );
-        };
+        }
 
         $scope.selectProject = function(keyProject,  idTask){
           $scope.actualProject[idTask] = keyProject
