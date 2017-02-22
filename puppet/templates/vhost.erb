@@ -11,8 +11,11 @@
        Allow from all
    </Directory>
  
-   # angular application 	
-   ProxyRequests on
+   # angular application
+   # set this Off to disabled to act as relay server
+   ProxyRequests Off
+   ProxyVia Off
+
    ProxyPass / http://localhost:<%= @app_port %>/
    # api	
    <Location /api>
