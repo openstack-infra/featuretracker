@@ -10,7 +10,7 @@ describe('Component: ProjectListComponent', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($componentController, $rootScope) {
     scope = $rootScope.$new();
-    ProjectListComponent = $componentController('ProjectListComponent', {
+    $componentController('ProjectListComponent', {
       $scope: scope
     });
   }));

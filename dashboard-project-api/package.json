@@ -22,7 +22,8 @@
     "loopback-datasource-juggler": "^2.39.0",
     "markdown": "^0.5.0",
     "serve-favicon": "^2.0.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "xss-filters": "^1.2.7"
   },
   "devDependencies": {
     "jshint": "^2.5.6",
